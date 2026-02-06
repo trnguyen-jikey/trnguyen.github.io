@@ -16,7 +16,7 @@ var titles = [
   "@Kru_",
   "@Kru",
   "@Kr",
-  "@k"
+  "@K"
 ];
 
 function changeTitle() {
