@@ -1,5 +1,8 @@
 const songs = [
-    "Đen - một triệu like ft. Thành Đồng (MV).mp3"
+    "Đen - một triệu like ft. Thành Đồng (MV).mp3",
+    "Đen - Lối Nhỏ ft. Phương Anh Đào (MV).mp3",
+    "Đen - Mười Năm ft. Ngọc Linh (MV) (Lộn Xộn 3).mp3",
+    "Đen - Anh Đếch Cần Gì Nhiều Ngoài Em ft. Vũ., Thành Đồng (MV).mp3"
 ];
 
 let currentSongIndex = 0;
