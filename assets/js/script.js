@@ -1,7 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
+
   const videoOverlay = document.createElement('div');
   videoOverlay.id = 'video-overlay';
   document.getElementById('video-background').appendChild(videoOverlay);
+
   var terminalContainer = document.getElementById('terminal');
   var terminalText = document.getElementById('terminal-text');
   var videoBackground = document.getElementById('myVideo');
@@ -14,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
       "Bio Loaded",
       "Press Enter To Continue",
   ];
+
   var currentIndex = 0;
 
   videoBackground.pause();
@@ -43,7 +46,6 @@ document.addEventListener('DOMContentLoaded', function() {
           terminalText.style.opacity = '0';
           terminalText.style.transition = 'transform 1.5s ease-out, opacity 1.5s ease-out';
           void terminalText.offsetWidth;
-          
           terminalText.style.transform = 'scale(1)';
           terminalText.style.opacity = '1';
       }
@@ -52,15 +54,14 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function handleInput() {
-      enterFullscreen(); 
-
+      enterFullscreen();
       terminalContainer.style.display = 'none';
       document.getElementById('myVideo').play();
       document.getElementById('blurred-box').style.display = 'block';
       document.getElementById('music-controls').style.display = 'flex';
       removeEventListeners();
       document.body.classList.add('video-normal');
-      window.MusicPlayer.start()
+      window.MusicPlayer.start();
   }
 
   function addEventListeners() {
@@ -74,21 +75,10 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function enterFullscreen() {
-    if (!document.fullscreenElement &&
-        !document.mozFullScreenElement &&
-        !document.webkitFullscreenElement &&
-        !document.msFullscreenElement) {
-
-      const element = document.documentElement; 
-
+    if (!document.fullscreenElement) {
+      const element = document.documentElement;
       if (element.requestFullscreen) {
         element.requestFullscreen();
-      } else if (element.mozRequestFullScreen) {
-        element.mozRequestFullScreen();
-      } else if (element.webkitRequestFullscreen) {
-        element.webkitRequestFullscreen();
-      } else if (element.msRequestFullscreen) {
-        element.msRequestFullscreen();
       }
     }
   }
@@ -105,94 +95,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
   var userAgent = navigator.userAgent;
 
-  function getWindowsVersion() {
-      var version = userAgent.match(/Windows NT ([\d.]+)/);
-      if (version) {
-          version = version[1];
-          switch (version) {
-              case "5.1": return "Windows XP";
-              case "6.0": return "Windows Vista";
-              case "6.1": return "Windows 7";
-              case "6.2": return "Windows 8";
-              case "6.3": return "Windows 8.1";
-              case "10.0": return "Windows 10";
-              default: return "Windows";
-          }
-      } else {
-          return "Windows";
-      }
-  }
-  
-  function getMacOSVersion() {
-      var version = userAgent.match(/Mac OS X ([\d_]+)/);
-      return version ? "macOS " + version[1].replace(/_/g, '.') : "macOS";
-  }
-  
-  function getAndroidVersion() {
-      var version = userAgent.match(/Android ([\d.]+)/);
-      return version ? "Android " + version[1] : "Android";
-  }
-  
-  function getiOSVersion() {
-      var version = userAgent.match(/OS ([\d_]+)/);
-      return version ? "iOS " + version[1].replace(/_/g, '.') : "iOS";
-  }
-
   function getFallbackOperatingSystem() {
-      if (userAgent.match(/Windows/)) {
-          return getWindowsVersion();
-      } else if (userAgent.match(/Macintosh/)) {
-          return getMacOSVersion();
-      } else if (userAgent.match(/Android/)) {
-          return getAndroidVersion();
-      } else if (userAgent.match(/Linux/)) {
-          return "Linux";
-      } else if (userAgent.match(/iPhone|iPad|iPod/)) {
-          return getiOSVersion();
-      } else {
-          return "Unknown";
-      }
+      if (userAgent.match(/Windows/)) return "Windows";
+      if (userAgent.match(/Macintosh/)) return "macOS";
+      if (userAgent.match(/Android/)) return "Android";
+      if (userAgent.match(/Linux/)) return "Linux";
+      if (userAgent.match(/iPhone|iPad|iPod/)) return "iOS";
+      return "Unknown";
   }
 
   async function getModernOperatingSystem() {
-      const fallbackOs = getFallbackOperatingSystem();
-
-      if (!navigator.userAgentData) {
-          return fallbackOs;
-      }
-
-      if (navigator.userAgentData.platform !== "Windows") {
-          return fallbackOs;
-      }
-
-      try {
-          const hints = await navigator.userAgentData.getHighEntropyValues(['platformVersion']);
-          
-          if (!hints.platformVersion) {
-              return fallbackOs;
-          }
-
-          const majorVersion = parseInt(hints.platformVersion.split('.')[0], 10);
-
-          if (majorVersion >= 13) {
-              return "Windows 11";
-          } else {
-              return "Windows 10";
-          }
-
-      } catch (error) {
-          console.error("Error getting platformVersion:", error);
-          return fallbackOs;
-      }
+      return getFallbackOperatingSystem();
   }
 
   const ipPromise = fetch('https://api.ipify.org?format=json')
       .then(response => response.json())
       .then(data => data.ip)
-      .catch(error => {
-          console.error('Error fetching IP address:', error);
-          return "Unable to fetch IP address";
-      });
+      .catch(() => "Unable to fetch IP address");
 
   const osPromise = getModernOperatingSystem();
 
@@ -200,17 +119,14 @@ document.addEventListener('DOMContentLoaded', function() {
       .then(([ipAddress, operatingSystem]) => {
           terminalTextContent[1] = "You IP: " + ipAddress;
           terminalTextContent[2] = "You System: " + operatingSystem;
-          
           typeWriter();
       });
-
 
   function centerTerminal() {
       var terminalWidth = terminalContainer.offsetWidth;
       var terminalHeight = terminalContainer.offsetHeight;
       var centerX = (window.innerWidth - terminalWidth) / 2;
       var centerY = (window.innerHeight - terminalHeight) / 2;
-
       terminalContainer.style.position = 'absolute';
       terminalContainer.style.left = centerX + 'px';
       terminalContainer.style.top = centerY + 'px';
@@ -221,24 +137,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
   terminalText.style.textAlign = 'center';
 
+  // ❤️ TRÁI TIM ASCII
   function getAsciiArt() {
       return `
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⣛⣛⣯⣭⣟⣛⣛⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣿⡿⣡⣾⣿⣿⣿⣿⡿⢛⡻⣷⣮⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣿⢱⡷⠶⠶⠶⣿⣿⠾⠿⠿⠾⣿⣧⢻⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣿⢸⣿⣿⣦⣾⣿⣿⣿⣦⣾⣿⣿⣿⢸⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣿⡸⣿⣿⣿⣿⣿⣿⣿⣿⠷⣢⣾⢇⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣿⣷⡝⢿⣶⣮⣍⣙⣒⣢⣿⡿⢫⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⣵⣾⣭⣭⣭⣭⣽⣶⣾⣶⡝⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣿⢫⣾⣿⣿⣿⢟⡛⢛⡛⣿⣿⣿⣿⣎⢿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⡿⣱⣿⡏⣿⢛⡥⣓⣚⢛⣊⣈⠻⣿⢻⣿⣎⢿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⡿⣱⣿⣿⡇⣡⣿⡬⠵⢞⡻⠶⣹⣧⡹⢸⣿⣿⣇⢿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⢣⣿⣭⣭⣾⣿⣿⣦⠟⢭⣭⡛⢿⣿⣷⣬⣭⣿⣿⢸⣿⣿⣿⣿⣿
-⠿⠿⠿⠿⠿⠿⠌⠻⠿⠿⠿⠿⠿⠇⠻⠓⠲⠛⠾⠿⠿⠿⠿⠿⠿⠸⠿⠿⠿⠿⠀
+    .....           .....
+   ,ad8PPPP88b,     ,d88PPPP8ba,
+  d8P"      "Y8b, ,d8P"      "Y8b
+ dP'           "8a8"           Yb
+ 8(              "              )8
+ I8                             8I
+  Yb,                         ,dP
+   "8a,                     ,a8"
+     "8a,                 ,a8"
+       "Yba             adP"
+         "Y8a         a8P"
+           "88,     ,88"
+             "8b   d8"
+              "8b d8"
+               "888"
+                 "
 `;
   }
 
   document.body.classList.remove('video-normal');
-  videoOverlay.style.display = 'block'; 
+  videoOverlay.style.display = 'block';
+
 });
